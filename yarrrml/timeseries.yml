@@ -1,0 +1,37 @@
+prefixes:
+  ex: "http://example.com/"
+  rdfs: "http://www.w3.org/2000/01/rdf-schema#"
+  sosa: "http://www.w3.org/ns/sosa/"
+  ssn: "http://www.w3.org/ns/ssn/"
+  geo: "http://www.opengis.net/ont/geosparql#"
+  dcterms: "http://purl.org/dc/terms/"
+  qudt: "http://qudt.org/schema/qudt/"
+  unit: "http://qudt.org/vocab/unit/"
+  gn: "http://www.geonames.org/ontology#"
+
+mappings:
+  TsId:
+    sources:
+        - access: hic_ts_id.csv
+          referenceFormulation: csv
+        - access: vmm_ts_id.csv
+          referenceFormulation: csv
+    s: sosa:Observation$(ts_id)
+    po:
+      - [dcterms:identifier, "$(group_id)"]
+      - [sosa:resultTime, "$(timestamp)"]
+      - [sosa:Result, "$(ts_value)"]
+      - [qudt:unit, unit:$(ts_unitname)]  
+      - [gn:geonameId, $(station_id)]
+  # station details
+  station:
+    sources:
+      - access: vmm_ts_id.csv
+        referenceFormulation: csv
+    s: gn:geonameId$(station_id)
+    #s: sosa:hasFeatureOfInterest$(ts_id)
+    po:
+      - [dcterms:identifier, "$(station_no)"] # Another unique identifier (alternative to geonameId)
+      - [gn:name, "$(station_name)"]
+      - [geo:latitude, "$(station_latitude)"]
+      - [geo:longitude, "$(station_longitude)"]
