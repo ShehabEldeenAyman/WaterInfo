@@ -9,6 +9,7 @@ prefixes:
   unit: "http://qudt.org/vocab/unit/"
   gn: "http://www.geonames.org/ontology#"
   xsd: "http://www.w3.org/2001/XMLSchema#"
+  cdt: "https://ci.mines-stetienne.fr/lindt/v4/custom_datatypes#ucum"
 
 mappings:
 ###
@@ -20,10 +21,10 @@ mappings:
           referenceFormulation: csv
     s: ex:ts_id$(ts_id)
     po:
-      - p: sosa:madeObservation
-        o:
-          value: ex:reading/$(ts_id)_$(timestamp)
-          type: iri
+      #- p: sosa:madeObservation
+        #o:
+          #value: ex:reading/$(ts_id)_$(timestamp)
+          #type: iri
       - p: rdfs:label
         o: 
           value: $(ts_path) #ex:ts_path/
@@ -62,7 +63,14 @@ mappings:
           referenceFormulation: csv
     s: ex:reading/$(ts_id)_$(timestamp)
     po: 
-      #- [sosa:hasSimpleResult, ]
+      - p:  sosa:madeBySensor
+        o:  
+          value: ex:ts_id$(ts_id)
+          type: iri
+      - p:  sosa:hasSimpleResult
+        o:
+          value: $(ts_value) $(ts_unitsymbol)
+          type: cdt:ucum
       - p: sosa:ObservedProperty
         o: 
           value: ex:stationparameter_longname/$(stationparameter_longname)
