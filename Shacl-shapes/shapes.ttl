@@ -1,0 +1,73 @@
+@prefix ex: <http://example.com/>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix sosa: <http://www.w3.org/ns/sosa/>.
+@prefix ssn: <http://www.w3.org/ns/ssn/>.
+@prefix  geo: <http://www.opengis.net/ont/geosparql#>.
+@prefix  dcterms: <http://purl.org/dc/terms/>.
+@prefix  qudt: <http://qudt.org/schema/qudt/>.
+@prefix  unit: <http://qudt.org/vocab/unit/>.
+@prefix  gn: <http://www.geonames.org/ontology#>.
+@prefix  xsd: <http://www.w3.org/2001/XMLSchema#>.
+@prefix  cdt: <https://ci.mines-stetienne.fr/lindt/v4/custom_datatypes#ucum>.
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+
+# Sensor Shape
+ex:SensorShape a sh:NodeShape ;
+    sh:targetClass sosa:Sensor ;
+
+    sh:property [
+        sh:path rdfs:label ;
+        sh:datatype xsd:string ;
+    ] ;
+
+    sh:property [
+        sh:path sosa:hasFeatureOfInterest ;
+        sh:nodeKind sh:IRI ;
+    ] ;
+    sh:property [
+        sh:path sosa:isHostedBy ;
+        sh:nodeKind sh:IRI ;
+    ] .
+
+# Group Shape
+ex:GroupShape a sh:NodeShape ;
+    sh:targetSubjectsOf ex:group_id ;
+  
+    sh:property [
+        sh:path rdfs:label ;
+        sh:datatype xsd:string ;
+    ] .
+
+# Observation Shape
+ex:ObservationShape a sh:NodeShape ;
+    sh:targetClass sosa:Observation ;
+
+    sh:property [
+        sh:path sosa:madeBySensor ;
+        sh:nodeKind sh:IRI ;
+    ] ;
+    sh:property [
+        sh:path sosa:hasSimpleResult ;
+        sh:datatype cdt:ucum ;
+    ] ;
+    sh:property [
+        sh:path sosa:ObservedProperty ;
+        sh:nodeKind sh:IRI ;
+    ] ;
+    sh:property [
+        sh:path sosa:resultTime ;
+        sh:datatype xsd:dateTime ;
+    ] .
+
+# Station Shape
+ex:StationShape a sh:NodeShape ;
+    sh:targetClass sosa:Platform ;
+
+    sh:property [
+        sh:path sosa:hasFeatureOfInterest ;
+        sh:nodeKind sh:IRI ;
+    ] ;
+    sh:property [
+        sh:path geo:asWKT ;
+        sh:datatype geo:wktLiteral ;
+    ] .

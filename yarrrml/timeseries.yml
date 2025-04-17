@@ -21,14 +21,12 @@ mappings:
           referenceFormulation: csv
     s: ex:ts_id$(ts_id)
     po:
-      #- p: sosa:madeObservation
-        #o:
-          #value: ex:reading/$(ts_id)_$(timestamp)
-          #type: iri
+      - p: a
+        o: sosa:Sensor
       - p: rdfs:label
         o: 
           value: $(ts_path) #ex:ts_path/
-          type: xsd:string
+          datatype: xsd:string
       - p: sosa:hasFeatureOfInterest
         o: 
           value: ex:group_id/$(group_id)
@@ -48,12 +46,12 @@ mappings:
     po:
       - p: rdfs:label
         o:
-          value: $(group_name) #ex:group_name/
+          value: ex:group_name/$(group_name) #ex:group_name/
           type: xsd:string
       - p: rdfs:label
         o: 
-          value: $(group_type) #ex:group_type/
-          type: xsd:string
+          value: ex:group_type/$(group_type) #ex:group_type/
+          datatype: xsd:string
 ###
   Observation:
     sources:
@@ -63,6 +61,8 @@ mappings:
           referenceFormulation: csv
     s: ex:reading/$(ts_id)_$(timestamp)
     po: 
+      - p: a
+        o: sosa:Observation
       - p:  sosa:madeBySensor
         o:  
           value: ex:ts_id$(ts_id)
@@ -70,15 +70,15 @@ mappings:
       - p:  sosa:hasSimpleResult
         o:
           value: $(ts_value) $(ts_unitsymbol)
-          type: cdt:ucum
+          datatype: cdt:ucum
       - p: sosa:ObservedProperty
         o: 
           value: ex:stationparameter_longname/$(stationparameter_longname)
           type: iri
       - p: sosa:resultTime
         o:
-          value: "$(timestamp)"
-          type: xsd:dateTime
+          value: $(timestamp)
+          datatype: xsd:dateTime
 ###
   Station:
     sources:
@@ -88,16 +88,18 @@ mappings:
           referenceFormulation: csv
     s: ex:station_id/$(station_id)
     po:
+      - p: a
+        o: sosa:Platform
       - p: sosa:hasFeatureOfInterest
         o: 
-          value: $(station_name) #ex:station_name/
-          type: xsd:string
+          value: ex:station_name/$(station_name) #ex:station_name/
+          type: iri
       - p: sosa:hasFeatureOfInterest
         o:
-          value: $(station_no) #ex:station_no/
-          type: xsd:string
+          value: ex:station_name/$(station_no) #ex:station_no/
+          type: iri
       - p: geo:asWKT
         o: Point($station_latitude $station_longitude)
-        type: geo:wktLiteral
+        datatype: geo:wktLiteral
 
  
