@@ -8,7 +8,7 @@
 @prefix  unit: <http://qudt.org/vocab/unit/>.
 @prefix  gn: <http://www.geonames.org/ontology#>.
 @prefix  xsd: <http://www.w3.org/2001/XMLSchema#>.
-@prefix  cdt: <https://ci.mines-stetienne.fr/lindt/v4/custom_datatypes#ucum>.
+@prefix  cdt: <https://ci.mines-stetienne.fr/lindt/v4/custom_datatypes#>.
 @prefix sh: <http://www.w3.org/ns/shacl#> .
 
 # Sensor Shape

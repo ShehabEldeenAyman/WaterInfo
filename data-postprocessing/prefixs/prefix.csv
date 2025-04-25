@@ -1,0 +1,11 @@
+ex,http://example.com/
+rdfs,http://www.w3.org/2000/01/rdf-schema/
+sosa,http://www.w3.org/ns/sosa/
+ssn,http://www.w3.org/ns/ssn/
+geo,http://www.opengis.net/ont/geosparql/
+dcterms,http://purl.org/dc/terms/
+qudt,http://qudt.org/schema/qudt/
+unit,http://qudt.org/vocab/unit/
+gn,http://www.geonames.org/ontology/
+xsd,http://www.w3.org/2001/XMLSchema/
+cdt,https://ci.mines-stetienne.fr/lindt/v4/custom_datatypes#

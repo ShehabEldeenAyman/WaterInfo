@@ -10,5 +10,14 @@ pyshacl -s Shacl-shapes/shapes.ttl -d generated-rdf/timeseriesmapping.ttl
 Start a solid community server:
 npx @solid/community-server
 
+Install a local solid community server:
+git clone https://github.com/CommunitySolidServer/CommunitySolidServer.git
+cd CommunitySolidServer
+npm ci
+npm start 
+
+Start Penny:
+npm run dev
+
 Upload data to Solid Server: 
 curl -X POST -H "Slug:waterinfo" -H "Content-Type:text/turtle" --data-binary "@timeseriesmapping.ttl" http://localhost:3000/

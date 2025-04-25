@@ -9,7 +9,7 @@ prefixes:
   unit: "http://qudt.org/vocab/unit/"
   gn: "http://www.geonames.org/ontology#"
   xsd: "http://www.w3.org/2001/XMLSchema#"
-  cdt: "https://ci.mines-stetienne.fr/lindt/v4/custom_datatypes#ucum"
+  cdt: "https://ci.mines-stetienne.fr/lindt/v4/custom_datatypes#"
 
 mappings:
 ###
@@ -29,11 +29,11 @@ mappings:
           datatype: xsd:string
       - p: sosa:hasFeatureOfInterest
         o: 
-          value: ex:group_id/$(group_id)
+          value: ex:group_id_$(group_id)
           type: iri
       - p: sosa:isHostedBy
         o:
-          value: ex:station_id/$(station_id)
+          value: ex:station_id_$(station_id)
           type: iri
 ###
   Group:
@@ -42,16 +42,16 @@ mappings:
         referenceFormulation: csv
       - access: ../CSV-data/vmm_group_list.csv
         referenceFormulation: csv
-    s: ex:group_id/$(group_id)
+    s: ex:group_id_$(group_id)
     po:
       - p: rdfs:label
         o:
-          value: ex:group_name/$(group_name) #ex:group_name/
-          type: xsd:string
+          value: ex:group_name_$(group_name) #ex:group_name/
+          type: iri #xsd:string
       - p: rdfs:label
         o: 
-          value: ex:group_type/$(group_type) #ex:group_type/
-          datatype: xsd:string
+          value: ex:group_type_$(group_type) #ex:group_type/
+          type: iri #xsd:string
 ###
   Observation:
     sources:
@@ -59,7 +59,7 @@ mappings:
           referenceFormulation: csv
         - access: ../CSV-data/vmm_ts_id.csv
           referenceFormulation: csv
-    s: ex:reading/$(ts_id)_$(timestamp)
+    s: ex:reading_$(ts_id)_$(timestamp)
     po: 
       - p: a
         o: sosa:Observation
@@ -69,11 +69,12 @@ mappings:
           type: iri
       - p:  sosa:hasSimpleResult
         o:
-          value: $(ts_value) $(ts_unitsymbol)
+          value: "$(ts_value) $(ts_unitsymbol)"
           datatype: cdt:ucum
+          type: literal
       - p: sosa:ObservedProperty
         o: 
-          value: ex:stationparameter_longname/$(stationparameter_longname)
+          value: ex:stationparameter_longname_$(stationparameter_longname)
           type: iri
       - p: sosa:resultTime
         o:
@@ -86,20 +87,21 @@ mappings:
           referenceFormulation: csv
         - access: ../CSV-data/vmm_ts_id.csv
           referenceFormulation: csv
-    s: ex:station_id/$(station_id)
+    s: ex:station_id_$(station_id)
     po:
       - p: a
         o: sosa:Platform
       - p: sosa:hasFeatureOfInterest
         o: 
-          value: ex:station_name/$(station_name) #ex:station_name/
+          value: ex:station_name_$(station_name) #ex:station_name/
           type: iri
       - p: sosa:hasFeatureOfInterest
         o:
-          value: ex:station_name/$(station_no) #ex:station_no/
+          value: ex:station_name_$(station_no) #ex:station_no/
           type: iri
       - p: geo:asWKT
-        o: Point($station_latitude $station_longitude)
-        datatype: geo:wktLiteral
+        o: 
+          value: "Point($(station_latitude) $(station_longitude))"
+          datatype: geo:wktLiteral
 
  
