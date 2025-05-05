@@ -21,3 +21,6 @@ npm run dev
 
 Upload data to Solid Server: 
 curl -X POST -H "Slug:waterinfo" -H "Content-Type:text/turtle" --data-binary "@timeseriesmapping.ttl" http://localhost:3000/
+
+Use the prefix post-prossing:
+python prefixSuffix.py --graph ../generated-rdf/timeseriesmapping.ttl --prefix prefixes/prefix.csv --output ../generated-rdf/ttimeseries_with_prefixes.ttl
