@@ -10,98 +10,57 @@ prefixes:
   gn: "http://www.geonames.org/ontology#"
   xsd: "http://www.w3.org/2001/XMLSchema#"
   cdt: "https://ci.mines-stetienne.fr/lindt/v4/custom_datatypes#"
+  tree: "https://w3id.org/tree#"
+  ldes: "https://w3id.org/ldes#"
 
+  
 mappings:
-###
-  Sensor:
+  timeseries:
     sources:
-        - access: ../CSV-data/hic_ts_id.csv
-          referenceFormulation: csv
-        - access: ../CSV-data/vmm_ts_id.csv
-          referenceFormulation: csv
-    s: ex:ts_id$(ts_id)
-    po:
-      - p: a
-        o: sosa:Sensor
-      - p: rdfs:label
-        o: 
-          value: $(ts_path) #ex:ts_path/
-          datatype: xsd:string
-      - p: sosa:hasFeatureOfInterest
-        o: 
-          value: ex:group_id_$(group_id)
-          type: iri
-      - p: sosa:isHostedBy
-        o:
-          value: ex:station_id_$(station_id)
-          type: iri
-###
-  Group:
-    sources:    
-      - access: ../CSV-data/hic_group_list.csv
+      - access: ../CSV-data/vmm_ts_values_with_headers.csv
         referenceFormulation: csv
-      - access: ../CSV-data/vmm_group_list.csv
-        referenceFormulation: csv
-    s: ex:group_id_$(group_id)
+    s: ex:reading_$(ts_id)_$(Timestamp)
     po:
-      - p: rdfs:label
-        o:
-          value: ex:group_name_$(group_name) #ex:group_name/
-          type: iri #xsd:string
-      - p: rdfs:label
-        o: 
-          value: ex:group_type_$(group_type) #ex:group_type/
-          type: iri #xsd:string
-###
-  Observation:
-    sources:
-        - access: ../CSV-data/hic_ts_id.csv
-          referenceFormulation: csv
-        - access: ../CSV-data/vmm_ts_id.csv
-          referenceFormulation: csv
-    s: ex:reading_$(ts_id)_$(timestamp)
-    po: 
       - p: a
         o: sosa:Observation
-      - p:  sosa:madeBySensor
-        o:  
-          value: ex:ts_id$(ts_id)
-          type: iri
-      - p:  sosa:hasSimpleResult
-        o:
-          value: "$(ts_value) $(ts_unitsymbol)"
-          datatype: cdt:ucum
-          type: literal
-      - p: sosa:ObservedProperty
-        o: 
-          value: ex:stationparameter_longname_$(stationparameter_longname)
-          type: iri
+
       - p: sosa:resultTime
         o:
-          value: $(timestamp)
+          value: $(Timestamp)
           datatype: xsd:dateTime
-###
-  Station:
-    sources:
-        - access: ../CSV-data/hic_ts_id.csv
-          referenceFormulation: csv
-        - access: ../CSV-data/vmm_ts_id.csv
-          referenceFormulation: csv
-    s: ex:station_id_$(station_id)
-    po:
-      - p: a
-        o: sosa:Platform
-      - p: sosa:hasFeatureOfInterest
-        o: 
-          value: ex:station_name_$(station_name) #ex:station_name/
-          type: iri
-      - p: sosa:hasFeatureOfInterest
-        o:
-          value: ex:station_name_$(station_no) #ex:station_no/
-          type: iri
-      - p: geo:asWKT
-        o: 
-          value: "Point($(station_latitude) $(station_longitude))"
-          datatype: geo:wktLiteral
 
- 
+      - p: sosa:hasSimpleResult
+        o:
+          value: $(Value)
+          datatype: xsd:string
+
+      - p: ex:Interpolation_Type  #sosa:FeatureOfIntrest
+        o:
+          value: ex:InterpolationType/$(InterpolationType) #ex:InterpolationType/$(InterpolationType)
+          type: iri
+
+      - p: ex:Quality_Code
+        o:
+          value: ex:QualityCode/$(QualityCode)
+          type: iri
+
+      - p: ex:Quality_Code_Name
+        o:
+          value: $(QualityCodeName)
+          datatype: xsd:string
+
+      - p: ex:Quality_Code_Description
+        o:
+          value: $(QualityCodeDescription)
+          datatype: xsd:string
+
+      - p: ex:Quality_Code_color
+        o:
+          value: $(QualityCodeColor)
+          datatype: xsd:string
+
+      - p: ex:ts_id
+        o:
+          value: ex:/ts_id/$(ts_id)
+          type: iri
+

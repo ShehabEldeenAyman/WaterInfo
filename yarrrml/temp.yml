@@ -8,32 +8,55 @@ prefixes:
   qudt: "http://qudt.org/schema/qudt/"
   unit: "http://qudt.org/vocab/unit/"
   gn: "http://www.geonames.org/ontology#"
+  xsd: "http://www.w3.org/2001/XMLSchema#"
+  cdt: "https://ci.mines-stetienne.fr/lindt/v4/custom_datatypes#"
 
 mappings:
-  TsId:
+  timeseries:
     sources:
-        - access: hic_ts_id.csv
-          referenceFormulation: csv
-        - access: vmm_ts_id.csv
-          referenceFormulation: csv
-    s: sosa:Observation$(ts_id)
-    po:
-      - [dcterms:identifier, "$(group_id)"]
-      - [sosa:resultTime, "$(timestamp)"] #add date time datatype
-      - [sosa:Result, "$(ts_value)"] #hassuimpleresult
-      - [qudt:unit, unit:$(ts_unitname)]  
-      - [gn:geonameId, $(station_id)] 
-  # station details
-  station:
-    sources:
-      - access: vmm_ts_id.csv
+      - access: ../CSV-data/vmm_ts_values_with_headers.csv
         referenceFormulation: csv
-      - access: hic_ts_id.csv
-        referenceFormulation: csv
-    s: gn:geonameId$(station_id)
-    #s: sosa:hasFeatureOfInterest$(ts_id)
+    s: ex:reading_$(ts_id)_$(Timestamp)
     po:
-      - [dcterms:identifier, "$(station_no)"] # Another unique identifier (alternative to geonameId)
-      - [gn:name, "$(station_name)"]
-      - [geo:latitude, "$(station_latitude)"]
-      - [geo:longitude, "$(station_longitude)"]
+      - p: a
+        o: sosa:Observation
+
+      - p: sosa:resultTime
+        o:
+          value: $(Timestamp)
+          datatype: xsd:dateTime
+
+      - p: sosa:hasSimpleResult
+        o:
+          value: "$(Value)"
+          datatype: xsd:string  # or xsd:double if numeric
+
+      - p: ex:Interpolation_Type
+        o:
+          value: $(Interpolation Type)
+          type: iri
+
+      - p: ex:Quality_Code
+        o:
+          value: $(Quality Code)
+          type: iri
+
+      - p: ex:Quality_Code_Name
+        o:
+          value: "$(Quality Code Name)"
+          datatype: xsd:string
+
+      - p: ex:Quality_Code_Description
+        o:
+          value: "$(Quality Code Description)"
+          datatype: xsd:string
+
+      - p: ex:Quality_Code_color
+        o:
+          value: "$(Quality Code Color)"
+          datatype: xsd:string  # assuming color in HEX, not a URI
+
+      - p: ex:ts_id
+        o:
+          value: $(ts_id)
+          type: iri

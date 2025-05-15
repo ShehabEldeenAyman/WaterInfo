@@ -1,0 +1,32 @@
+# rmlstreamer-config.yaml
+sources:
+  - name: sample
+    type: file
+    path: CSV-data/test-sample-time-series.csv
+    format: csv
+
+mappings:
+  - name: WaterObservation
+    sources: [ sample ]
+    # each row gets its own blank-node Observation: _:obs{_rowIndex}
+    subject: "_:obs{_rowIndex}"
+    triples:
+      # type
+      - [ "", "a", "http://www.w3.org/ns/sosa/Observation" ]
+      # sensor
+      - [ "", "http://www.w3.org/ns/sosa/madeBySensor",
+          "http://example.org/sensor/WaterSensor123" ]
+      # timestamp → xsd:dateTime
+      - [ "", "http://www.w3.org/ns/sosa/resultTime",
+          "{{ Timestamp }}"^^xsd:dateTime ]
+      # observed property (hard-coded here to waterTemperature; swap in your URI)
+      - [ "", "http://www.w3.org/ns/sosa/observedProperty",
+          "http://example.org/observedProperty/waterTemperature" ]
+      # numeric result → xsd:float
+      - [ "", "http://www.w3.org/ns/sosa/hasSimpleResult",
+          "{{ Value }}"^^xsd:float ]
+      # if you also want quality codes:
+      - [ "", "http://example.org/ontology/qualityCode",
+          "{{ QualityCode }}"^^xsd:integer ]
+      - [ "", "http://example.org/ontology/qualityCodeName",
+          "{{ QualityCodeName }}" ]
