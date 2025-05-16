@@ -1,42 +1,132 @@
-Use waterinfo data scrapper:
-python waterinfo-scrap.py
+# Waterinfo.be Use Case
 
-Use yarrrml-parser (a Node.js tool):
-yarrrml-parser -i yarrrml/timeseries.yml -o generated-rdf/timeseries.rml.ttl 
+This repository demonstrates the **Waterinfo.be** use case, designed to transform sensory data into a Linked Data Event Stream (LDES). The stream is made web-accessible, enabling easy fetching, storage, and querying.
 
+---
 
-Run RMLMapper to generate RDF:
-java -jar rmlmapper.jar -m generated-rdf/yarrrml-mapping.rml.ttl -o generated-rdf/yarrrmlmapping.ttl
+## 🔍 What is Waterinfo Vlaanderen?
 
-java -Xmx4g -jar rmlmapper.jar -m generated-rdf/timeseries.rml.ttl  -o generated-rdf/timeseriesmapping.ttl
+[Waterinfo Vlaanderen](https://www.waterinfo.be/) is the official online portal of the Flemish government for real-time water-related data and forecasts. Managed by the **Vlaamse Milieumaatschappij (VMM)**, it provides comprehensive information on:
 
-Run RMLStreamer to generate LDES:
-java -jar rmlstreamer.jar toFile -m generated-rdf/timeseries_ldes-mapping.rml.ttl -o generated-rdf/timeseriesmappingLDES.ttl
+- Water levels and tides
+- Rainfall and droughts
+- Flood risks throughout Flanders
 
-PySHACL for shacl shape evaluation:
-pyshacl -s Shacl-shapes/shapes.ttl -d generated-rdf/timeseriesmapping.ttl 
+### 🌊 Key Features
 
-Start a solid community server:
-npx @solid/community-server
+- **Real-Time Water Levels and Flood Forecasts**: Includes 48-hour flood predictions for rivers and streams.
+- **Rainfall and Drought Monitoring**: Rain radar and pluviometer data.
+- **Tide Information**: Tidal forecasts and digital tide books.
+- **Flood Risk Maps**: Maps and watercourse data.
 
-Install a local solid community server:
-git clone https://github.com/CommunitySolidServer/CommunitySolidServer.git
-cd CommunitySolidServer
-npm ci
-npm start 
+---
 
-Start Penny:
-npm run dev
+## 📥 Access to Data
 
-Upload data to Solid Server: 
-curl -X POST -H "Slug:waterinfo" -H "Content-Type:text/turtle" --data-binary "@timeseriesmapping.ttl" http://localhost:3000/
+There are two open-source libraries (Python and R) that facilitate access to Waterinfo data. These are maintained by **Fluves**, with contributions from **VITO**.
 
-Use the prefix post-prossing:
-python data-postprocessing/prefixSuffix.py --graph generated-rdf/timeseriesmapping.ttl --prefix data-postprocessing/prefixes/prefix.csv --output generated-rdf/timeseries_with_prefixes.ttl
+---
 
-##################################################
+## 🔎 Data Overview
 
+### Data Sources
 
+- **VMM** (Vlaamse Milieumaatschappij)
+- **HIC** (Hydrologisch Informatiecentrum)
 
+### Sensor Data
 
+- **Station info**: Location, address, etc.
+- **Observations**: Timestamp, reading, units, etc.
 
+### Challenges
+
+- Discrete, unlinked readings
+- No standard model (e.g., SSN/SOSA)
+- Scattered data sources
+- Difficult to compute on segmented data
+- Large volumes = performance issues
+
+---
+
+## 🔧 Data Pipeline
+
+### 1. Data Scraper
+
+Fetches data from Waterinfo.be APIs (VMM/HIC). Each station and sensor has a unique ID. Up to 5 years of historical data can be fetched (with rate limits).
+
+📌 **Standalone scraper module**: [GitHub Link](https://github.com/ShehabEldeenAyman/waterinfo-scrap)
+
+#### Group List Attributes
+
+- `group_id`
+- `group_name`
+- `group_type`
+
+#### Station Attributes
+
+Includes `ts_id`, `timestamp`, `station_latitude`, `station_name`, `ts_unitsymbol`, etc.
+
+#### Sensor Reading Attributes
+
+Includes `Value`, `QualityCode`, `Runoff Value`, `ReturnPeriod`, `Comment`, etc.
+
+---
+
+### 2. Data Pre-Processing
+
+- Transforms attributes into **URI-compliant** format.
+- Converts units to **UCUM** (Unified Code for Units of Measure).
+
+---
+
+### 3. Mapping Rules
+
+Maps CSV readings to relational and semantic RDF using:
+
+- **SSN/SOSA** ontologies
+- **RML Mapper** & **RML Streamer**
+
+---
+
+### 4. Data Post-Processing
+
+Optimizes RDF by:
+
+- Replacing long URIs with prefixes.
+- Reducing file size by up to **61%**.
+
+📌 **Standalone prefix binder module**: [GitHub Link](https://github.com/ShehabEldeenAyman/rdf-prefix-binder)
+
+---
+
+### 5. Rules and Constraints
+
+Applies validation via **SHACL shapes** to ensure model compliance.
+
+---
+
+### 6. LDES Conversion *(In Development)*
+
+Converts RDF to LDES and adds **TREE hypermedia** for sensory observations.
+
+> Future support will extend to general star-pattern observations.
+
+---
+
+## 📂 Output Formats
+
+- **RDF-compliant data**
+- **LDES data**
+
+---
+
+## 🧑‍💻 Contributing
+
+Pull requests are welcome. For significant changes, please open an issue first to discuss what you'd like to change.
+
+---
+
+## 📜 License
+
+This project is licensed under the MIT License.
