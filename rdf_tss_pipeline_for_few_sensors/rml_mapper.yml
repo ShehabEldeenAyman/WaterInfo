@@ -1,0 +1,33 @@
+prefixes:
+
+  ex: "http://example.com/"
+  rdfs: "http://www.w3.org/2000/01/rdf-schema#"
+  sosa: "http://www.w3.org/ns/sosa/"
+  ssn: "http://www.w3.org/ns/ssn/"
+  xsd: "http://www.w3.org/2001/XMLSchema#"
+
+mappings:
+  timeseries:
+    sources:
+      - access: sample_data.csv
+        referenceFormulation: csv
+    s: ex:reading_$(ts_id)_$(Timestamp)
+    po:
+      - p: a
+        o: sosa:Observation
+      
+      - p: sosa:madeBySensor
+        o: $(ts_id)
+
+      - p: sosa:hasSimpleResult
+        o: 
+          value: $(Value)
+          datatype: xsd:double 
+
+      - p: sosa:observedProperty
+        o: $(stationparameter_longname)
+
+      - p: sosa:resultTime
+        o:
+          value: $(Timestamp)
+          datatype: xsd:dateTime
