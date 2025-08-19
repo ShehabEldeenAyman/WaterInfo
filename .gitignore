@@ -1,3 +1,5 @@
 *.jar
 *.ttl
 *.csv
+
+!/rdf_tss_pipeline_for_few_sensors/SHACL.ttl
